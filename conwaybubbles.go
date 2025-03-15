@@ -24,37 +24,6 @@ func (m model) toggleState(x int, y int) {
 	m.matrix[x][y].curr_gen = !m.matrix[x][y].curr_gen
 }
 
-func (m model) countNeighbors() {
-	var neighbors = [8][2]int{{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}}
-	var nx_cord, ny_cord int
-
-	nrows := len(m.matrix)
-	ncols := len(m.matrix[0])
-
-	for i := 0; i < len(m.matrix); i++ {
-		for j := 0; j < len(m.matrix[i]); j++ {
-			m.matrix[i][j].neighbors = 0
-		}
-	}
-
-	// loop over matrix
-	for i := 0; i < len(m.matrix); i++ {
-		for j := 0; j < len(m.matrix[i]); j++ {
-			for _, neighbor := range neighbors {
-				nx_cord = i + neighbor[0]
-				ny_cord = j + neighbor[1]
-
-				// check if neigbour coordinates are inside bounds
-				if nx_cord >= 0 && ny_cord >= 0 && nx_cord < nrows && ny_cord < ncols {
-					if m.matrix[nx_cord][ny_cord].curr_gen {
-						m.matrix[i][j].neighbors += 1
-					}
-				}
-			}
-		}
-	}
-}
-
 func initialModel() model {
 	matrix := make([][]tile, 10)
 	for row := range matrix {
@@ -107,7 +76,8 @@ func (m model) RenderHeader() string {
 	header := "Conway's Game Of Life\n"
 	header += fmt.Sprintf("Cursor pos: x:%d y:%d\n", m.cursor["x"], m.cursor["y"])
 	header += fmt.Sprintf("Map Size: x:%d y:%d\n", len(m.matrix), len(m.matrix[0]))
-	header += "(c) count neighbors, (a) toggle between map and neighbor count view"
+	header += "(e) toggle tile state, (n) activate next generation\n"
+	header += "(a) toggle between map and neighbor count view, (q) quit"
 	return headerStyle.Render(header)
 }
 
@@ -223,6 +193,11 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.countNeighbors()
 		case "a":
 			m.altscreen = !m.altscreen
+			// go to next gen
+		case "n":
+			m.countNeighbors()
+			m.changeGen()
+			m.RenderGameMap()
 		}
 
 	}
