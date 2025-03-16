@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
@@ -17,22 +18,30 @@ type tile struct {
 type model struct {
 	matrix    [][]tile
 	cursor    map[string]int
+	textInput textinput.Model
 	altscreen bool
+	nrows     int
+	ncols     int
 }
 
-func (m model) toggleState(x int, y int) {
-	m.matrix[x][y].curr_gen = !m.matrix[x][y].curr_gen
-}
+// func (m *model) initMatrix() {
+// 	m.matrix = make([][]tile, 10)
+// 	for row := range m.matrix {
+// 		m.matrix[row] = make([]tile, 10)
+// 	}
+// }
 
-func initialModel() model {
-	matrix := make([][]tile, 10)
+func initialModel(nrows int, ncols int) model {
+	matrix := make([][]tile, nrows)
 	for row := range matrix {
-		matrix[row] = make([]tile, 10)
+		matrix[row] = make([]tile, ncols)
 	}
 
 	return model{
 		matrix: matrix,
 		cursor: map[string]int{"x": 0, "y": 0},
+		nrows:  nrows,
+		ncols:  ncols,
 	}
 }
 
@@ -41,7 +50,7 @@ func (m model) Init() tea.Cmd {
 }
 
 func main() {
-	p := tea.NewProgram(initialModel())
+	p := tea.NewProgram(initialModel(10, 50))
 	if _, err := p.Run(); err != nil {
 		fmt.Printf("Error running program: %v", err)
 		os.Exit(1)
@@ -96,7 +105,7 @@ func (m model) RenderGameMap() string {
 			}
 
 			// cursor highlighter
-			if i == m.cursor["y"] && j == m.cursor["x"] {
+			if i == m.cursor["x"] && j == m.cursor["y"] {
 				cell = cursorStyle.Render(cell)
 			}
 			game_map += cell
@@ -112,7 +121,7 @@ func (m model) RenderNeighborCount() string {
 		neighbor_count += "\n"
 		for j := range m.matrix[i] {
 
-			cell := m.matrix[i][j]
+			cell := &m.matrix[i][j]
 			cellText := fmt.Sprintf(" %d", cell.neighbors)
 
 			if cell.curr_gen {
@@ -139,7 +148,7 @@ func (m model) RenderNeighborCount() string {
 			}
 
 			// render cursor
-			if i == m.cursor["y"] && j == m.cursor["x"] {
+			if i == m.cursor["x"] && j == m.cursor["y"] {
 				styled_cell = cursorStyle.Render(cellText)
 			}
 			neighbor_count += styled_cell
@@ -169,24 +178,24 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		// move cursor
 		case "up":
-			if m.cursor["y"] > 0 {
-				m.cursor["y"] += -1
-			}
-		case "down":
-			if m.cursor["y"] < len(m.matrix[0])-1 {
-				m.cursor["y"] += 1
-			}
-		case "left":
 			if m.cursor["x"] > 0 {
 				m.cursor["x"] += -1
 			}
-		case "right":
-			if m.cursor["x"] < len(m.matrix)-1 {
+		case "down":
+			if m.cursor["x"] < m.nrows-1 {
 				m.cursor["x"] += 1
+			}
+		case "left":
+			if m.cursor["y"] > 0 {
+				m.cursor["y"] += -1
+			}
+		case "right":
+			if m.cursor["y"] < m.ncols-1 {
+				m.cursor["y"] += 1
 			}
 		// switch tile state
 		case "e":
-			m.toggleState(m.cursor["y"], m.cursor["x"])
+			m.toggleState(m.cursor["x"], m.cursor["y"])
 		// next generation
 		case "c":
 			// execute count and change gen

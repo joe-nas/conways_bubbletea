@@ -1,5 +1,9 @@
 package main
 
+func (m model) toggleState(x int, y int) {
+	m.matrix[x][y].curr_gen = !m.matrix[x][y].curr_gen
+}
+
 func (m model) countNeighbors() {
 	var neighbors = [8][2]int{{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}}
 	var nx_cord, ny_cord int
