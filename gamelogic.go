@@ -35,10 +35,10 @@ func (m model) countNeighbors() {
 	}
 }
 
-func (m model) changeGen() {
+func (m *model) changeGen() {
 	nrows := len(m.matrix)
 	ncols := len(m.matrix[0])
-
+	generation := &m.generation
 	for i := range nrows {
 		for j := range ncols {
 			curr_gen := &m.matrix[i][j].curr_gen
@@ -70,4 +70,5 @@ func (m model) changeGen() {
 			*next_gen, *curr_gen = *curr_gen, *next_gen
 		}
 	}
+	*generation += 1
 }
