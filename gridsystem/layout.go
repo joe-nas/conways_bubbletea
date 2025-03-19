@@ -31,20 +31,30 @@ var (
 		Background(lipgloss.Color("#7d33ff"))
 )
 
-func (c *Column) addContentToColumn() {
-	c.s = teststyle.Render("lkgjdlfkgldf")
+func (c *Column) addContentToColumn(s string) {
+	c.s = teststyle.Render(s)
 }
 
 func main() {
 	var layout = NewLayout()
 	// row0 - 2
 
-	layout.addColumns(0)
 	layout.addColumns(1)
+	layout.layout_matrix[0] = []Column{{s: "jernvnb,"}}
 	layout.addColumns(2)
+	layout.layout_matrix[1] = []Column{{s: teststyle.Render("fsdfsdf")}, {s: "hoeg"}}
 	layout.addColumns(10)
+	layout.layout_matrix[2][3].addContentToColumn(teststyle.Render("0000345384598"))
 
-	fmt.Print(layout)
+	// fmt.Print(layout)
+	lm := &layout.layout_matrix
+	for i := range *lm {
+		for j := range (*lm)[i] {
+			fmt.Print((*lm)[i][j])
+		}
+		fmt.Println()
+
+	}
 }
 
 // func (l layout) addColumn() {

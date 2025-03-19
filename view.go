@@ -36,7 +36,7 @@ var (
 func (m model) RenderHeader() string {
 
 	header := "Conway's Game Of Life\n"
-	header += fmt.Sprintf("Cursor pos: x:%d y:%d\n", m.cursor["x"], m.cursor["y"])
+	header += fmt.Sprintf("Cursor pos: x:%d y:%d \t\t Autorun: %t\n", m.cursor["x"], m.cursor["y"], m.autorun)
 	header += fmt.Sprintf("Current generation: %d\n", m.generation)
 	header += fmt.Sprintf("Map Size: x:%d y:%d\n", len(m.matrix), len(m.matrix[0]))
 	header += "(e) toggle tile state, (n) activate next generation\n"
@@ -68,10 +68,10 @@ func (m model) RenderGameMap() string {
 	return headerStyle.Render(game_map)
 }
 
-func (m model) RenderModal() string {
-	// lipgloss.Place(10, 10, lipgloss.Center, lipgloss.Center, headerStyle.Render("Dies ist ein test"))
-	return lipgloss.Place(10, 10, lipgloss.Right, lipgloss.Top, headerStyle.Render("Dies ist ein test"))
-}
+// func (m model) RenderModal() string {
+// 	// lipgloss.Place(10, 10, lipgloss.Center, lipgloss.Center, headerStyle.Render("Dies ist ein test"))
+// 	return lipgloss.Place(10, 10, lipgloss.Right, lipgloss.Top, headerStyle.Render("Dies ist ein test"))
+// }
 
 func (m model) RenderNeighborCount() string {
 	var neighbor_count string

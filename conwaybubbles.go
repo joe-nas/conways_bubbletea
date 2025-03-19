@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 
-	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -21,6 +21,7 @@ type model struct {
 	matrix     [][]tile
 	cursor     map[string]int
 	altscreen  bool
+	autorun    bool
 	nrows      int
 	ncols      int
 	generation int
@@ -38,15 +39,19 @@ func initialModel(nrows int, ncols int) model {
 		nrows:      nrows,
 		ncols:      ncols,
 		generation: 0,
+		autorun:    false,
 	}
 }
 
 func (m model) Init() tea.Cmd {
-	return textinput.Blink
+
+	// while m.autorun == true {
+	// }
+	return nil
 }
 
 func main() {
-	p := tea.NewProgram(initialModel(20, 50))
+	p := tea.NewProgram(initialModel(15, 50))
 	if _, err := p.Run(); err != nil {
 		fmt.Printf("Error running program: %v", err)
 		os.Exit(1)
@@ -54,8 +59,9 @@ func main() {
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	// var cmd tea.Cmd
+	// switch/ distinguish between message types like Tick or KeyMsg
 	switch msg := msg.(type) {
+
 	case tea.KeyMsg:
 		switch msg.String() {
 		// quit
@@ -96,12 +102,49 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "r":
 			// reset counter
 			m.generation = 0
-		case "x":
-			// move forward x generations
-			m.RenderModal()
-		}
+			// case "x":
+			// 	// move forward x generations
+			// 	m.RenderModal()
+		case "s":
+			// start stop autorun
+			m.autorun = !m.autorun
 
+			// if autorun start autorunCmd
+			if m.autorun {
+				return m, autorunCmd()
+			}
+		}
+	case AutorunMsg:
+		if m.autorun {
+			m.countNeighbors()
+			m.changeGen()
+			m.RenderGameMap()
+			m.countNeighbors()
+
+			return m, autorunCmd()
+		}
 	}
 	// m.textInput, cmd = m.textInput.Update(msg)
 	return m, nil
 }
+func autorunCmd() tea.Cmd {
+	return tea.Tick(500*time.Millisecond, func(t time.Time) tea.Msg {
+		return AutorunMsg(t)
+		// return {t}
+	})
+}
+
+type AutorunMsg time.Time
+
+// func (m *model) autorun_func() {
+// 	for m.autorun {
+// 		time.Sleep(500 * time.Millisecond)
+// 		m.countNeighbors()
+// 		m.changeGen()
+// 		m.RenderGameMap()
+// 		m.countNeighbors()
+// 		if !m.autorun {
+// 			break
+// 		}
+// 	}
+// }
