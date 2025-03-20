@@ -11,10 +11,19 @@ type Layout struct {
 }
 
 type Column struct {
-	s string
-	// row int
+	name    string
+	content string
+	style   lipgloss.Style
 	// col int
 }
+
+// func (l Layout) rowRender() string {
+// 	l.layout_matrix[]
+// }
+
+// func (c Column) newColumn(width, height int, name string) {
+// 	return
+// }
 
 func NewLayout() *Layout {
 	layout := new(Layout)
@@ -28,11 +37,19 @@ func (l *Layout) addColumns(columns int) {
 
 var (
 	teststyle = lipgloss.NewStyle().
-		Background(lipgloss.Color("#7d33ff"))
+			Background(lipgloss.Color("#7d33ff")).
+			Width(10).
+			Height(10).BorderStyle(lipgloss.RoundedBorder())
+
+	teststyle2 = lipgloss.NewStyle().
+			Background(lipgloss.Color("#ff5733")).
+			Width(10).
+			Height(7).BorderStyle(lipgloss.RoundedBorder())
 )
 
-func (c *Column) addContentToColumn(s string) {
-	c.s = teststyle.Render(s)
+func (c *Column) addContentToColumn(name string, s string) {
+	c.name = name
+	c.content = teststyle.Render(s)
 }
 
 func main() {
@@ -40,21 +57,21 @@ func main() {
 	// row0 - 2
 
 	layout.addColumns(1)
-	layout.layout_matrix[0] = []Column{{s: "jernvnb,"}}
+	layout.layout_matrix[0] = []Column{{name: "header", content: "jernvnb,"}}
 	layout.addColumns(2)
-	layout.layout_matrix[1] = []Column{{s: teststyle.Render("fsdfsdf")}, {s: "hoeg"}}
+	layout.layout_matrix[1] = []Column{{name: "stats", content: teststyle.Render("fsdfsdf;k ;dkf;gkd;fg ;ldfg;ldkfg  0e-r0ter")}, {name: "stats", content: teststyle2.Render("hoeg")}}
 	layout.addColumns(10)
-	layout.layout_matrix[2][3].addContentToColumn(teststyle.Render("0000345384598"))
+	// layout.layout_matrix[2][3].addContentToColumn(teststyle.Render("0000345384598"))
 
 	// fmt.Print(layout)
 	lm := &layout.layout_matrix
 	for i := range *lm {
 		for j := range (*lm)[i] {
-			fmt.Print((*lm)[i][j])
+			lipgloss.JoinHorizontal(lipgloss.Bottom, (*lm)[i][j].content)
 		}
-		fmt.Println()
-
 	}
+
+	fmt.Println(lipgloss.JoinHorizontal(lipgloss.Top, (*lm)[1][0].content, (*lm)[1][1].content, (*lm)[1][0].content, (*lm)[1][1].content))
 }
 
 // func (l layout) addColumn() {

@@ -25,8 +25,6 @@ type model struct {
 	nrows      int
 	ncols      int
 	generation int
-	mousex     int
-	mousey     int
 }
 
 func initialModel(nrows int, ncols int) model {
