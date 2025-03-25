@@ -177,16 +177,25 @@ func main() {
 // }
 
 var (
+	green    = lipgloss.Color("#b6f486")
+	blue     = lipgloss.Color("#88d4c3")
+	purple1  = lipgloss.Color("#a8aedd")
+	purlple2 = lipgloss.Color("#8769b6")
+	purple3  = lipgloss.Color("#400e63")
+)
+
+var (
 	titleStyle = lipgloss.NewStyle().
 			Underline(true).
-			Height(2)
-		// Background(lipgloss.Color("#7d33ff")).
+			Height(2).
+			Width(20)
+		// Background(lipgloss.Color("	#8769b6"))
 		// Width(10).
 		// Height(10).
 		// BorderStyle(lipgloss.ThickBorder())
 
 	headerStyle = lipgloss.NewStyle().
-			Background(lipgloss.Color("#7d33ff")).
+			Background(lipgloss.Color("#400e63")).
 			Width(10).
 			Height(10).BorderStyle(lipgloss.RoundedBorder())
 
@@ -196,12 +205,12 @@ var (
 			Height(10).BorderStyle(lipgloss.RoundedBorder())
 
 	bodyStyle = lipgloss.NewStyle().
-			Background(lipgloss.Color("#32cd32")).
+			Background(lipgloss.Color("	#b6f486")).
 			Width(10).
 			Height(7).BorderStyle(lipgloss.RoundedBorder())
 
 	footerStyle = lipgloss.NewStyle().
-			Background(lipgloss.Color("#ff5733")).
+			Background(lipgloss.Color("#a8aedd")).
 			Width(10).
 			Height(7).BorderStyle(lipgloss.RoundedBorder())
 )
