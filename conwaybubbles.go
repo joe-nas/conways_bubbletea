@@ -132,16 +132,3 @@ func autorunCmd() tea.Cmd {
 }
 
 type AutorunMsg time.Time
-
-// func (m *model) autorun_func() {
-// 	for m.autorun {
-// 		time.Sleep(500 * time.Millisecond)
-// 		m.countNeighbors()
-// 		m.changeGen()
-// 		m.RenderGameMap()
-// 		m.countNeighbors()
-// 		if !m.autorun {
-// 			break
-// 		}
-// 	}
-// }
