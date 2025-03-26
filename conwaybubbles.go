@@ -8,32 +8,16 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-type tile struct {
-	curr_gen  bool
-	next_gen  bool
-	neighbors int
-}
-
-type model struct {
-	// layout     layout
-
-	// state
-	matrix     [][]tile
-	cursor     map[string]int
-	altscreen  bool
-	autorun    bool
-	nrows      int
-	ncols      int
-	generation int
-}
-
 func initialModel(nrows int, ncols int) model {
+	layout := newGrid(1, 3, 1, 2, 1) // title, stats, help, game, footer
+
 	matrix := make([][]tile, nrows)
 	for row := range matrix {
 		matrix[row] = make([]tile, ncols)
 	}
 
 	return model{
+		layout:     *layout,
 		matrix:     matrix,
 		cursor:     map[string]int{"x": 0, "y": 0},
 		nrows:      nrows,
@@ -41,10 +25,6 @@ func initialModel(nrows int, ncols int) model {
 		generation: 0,
 		autorun:    false,
 	}
-}
-
-func (m model) Init() tea.Cmd {
-	return nil
 }
 
 func main() {
@@ -94,7 +74,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "n":
 			m.countNeighbors()
 			m.changeGen()
-			m.RenderGameMap()
+			m.renderGameMap()
 			m.countNeighbors()
 		case "r":
 			// reset counter
@@ -115,7 +95,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if m.autorun {
 			m.countNeighbors()
 			m.changeGen()
-			m.RenderGameMap()
+			m.renderGameMap()
 			m.countNeighbors()
 
 			return m, autorunCmd()
