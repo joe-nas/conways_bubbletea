@@ -92,3 +92,45 @@ print(
         8,
     ][2::-1]
 )
+
+
+liste = [
+    10,
+    20,
+    30,
+    40,
+    50,
+    60,
+    70,
+    80,
+    90,
+    100,
+]
+print("aufgabe 1", liste[1:5])
+print("aufgabe 2", liste[4:6])
+print("aufgabe 3", liste[2:9])
+print("aufgabe 4", liste[6:8])
+print("aufgabe 5", liste[1:])
+print("aufgabe 5", liste[:7])
+print("aufgabe 6", liste[2:-3])
+print("aufgabe 7", liste[4:-1])
+print("aufgabe 8", liste[-6:-2])
+print("aufgabe 9", liste[4:-3])
+print("aufgabe 10", liste[1:-1:2])
+print("aufgabe 11", liste[-2:-7:-3])
+print("aufgabe 12", liste[-2:-9:-4])
+print("aufgabe 13", liste[-1:-6:-1])
+print("aufgabe 14", liste[1:7:3])
+print("aufgabe 15", liste[-5:])
+print("aufgabe 16", liste[:4])
+print("aufgabe 17", liste[3:])
+print("aufgabe 18", liste[::3])
+
+
+def swapFirstLast(liste):
+    first = liste[:-1]
+    last = [liste.pop()]
+    return last + first
+
+
+print(swapFirstLast(liste))

@@ -7,21 +7,21 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-var (
-	// Row metadata
-	titleRow  = row{name: "title", index: 0, style: styles.TitleStyle}
-	headerRow = row{name: "header", index: 1, style: styles.HeaderStyle}
-	helpRow   = row{name: "header", index: 2, style: styles.HeaderStyle}
-	bodyRow   = row{name: "header", index: 3, style: styles.BodyStyle}
-	footerRow = row{name: "footer", index: 4, style: styles.FooterStyle}
-)
+// var (
+// 	// Row metadata
+// 	titleRow  = row{name: "title", index: 0, style: styles.TitleStyle}
+// 	headerRow = row{name: "header", index: 1, style: styles.HeaderStyle}
+// 	helpRow   = row{name: "header", index: 2, style: styles.HeaderStyle}
+// 	bodyRow   = row{name: "header", index: 3, style: styles.BodyStyle}
+// 	footerRow = row{name: "footer", index: 4, style: styles.FooterStyle}
+// )
 
-var (
-	//  Column metadata
-	statLeft   = column{name: "Stats left", index: 0, style: styles.HeaderStyle}
-	statCenter = column{name: "Stats center", index: 1, style: styles.TitleStyle}
-	statRight  = column{name: "Stats right", index: 2, style: styles.FooterStyle}
-)
+// var (
+// 	//  Column metadata
+// 	statLeft   = column{name: "Stats left", index: 0, style: styles.HeaderStyle}
+// 	statCenter = column{name: "Stats center", index: 1, style: styles.TitleStyle}
+// 	statRight  = column{name: "Stats right", index: 2, style: styles.FooterStyle}
+// )
 
 type tile struct {
 	curr_gen  bool
@@ -89,7 +89,7 @@ func (m model) renderGameMap() string {
 			game_map += cell
 		}
 	}
-	return styles.BodyStyle.Render(game_map)
+	return game_map
 }
 
 func (m model) renderNeighborCount() string {
