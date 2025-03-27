@@ -1,39 +1,10 @@
 package main
 
 import (
-	"fmt"
-	"os"
 	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
-
-func initialModel(nrows int, ncols int) model {
-	layout := newGrid(1, 3, 1, 2, 1) // title, stats, help, game, footer
-
-	matrix := make([][]tile, nrows)
-	for row := range matrix {
-		matrix[row] = make([]tile, ncols)
-	}
-
-	return model{
-		layout:     *layout,
-		matrix:     matrix,
-		cursor:     map[string]int{"x": 0, "y": 0},
-		nrows:      nrows,
-		ncols:      ncols,
-		generation: 0,
-		autorun:    false,
-	}
-}
-
-func main() {
-	p := tea.NewProgram(initialModel(15, 50))
-	if _, err := p.Run(); err != nil {
-		fmt.Printf("Error running program: %v", err)
-		os.Exit(1)
-	}
-}
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	// switch/ distinguish between message types like Tick or KeyMsg

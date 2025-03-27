@@ -14,8 +14,9 @@ var (
 
 var (
 	TitleStyle = lipgloss.NewStyle().
-			Underline(true).
-			Height(2).
+			Background(lipgloss.Color("#400e63")).
+			Underline(false).
+			Height(1).
 			Width(30)
 
 	HeaderStyle = lipgloss.NewStyle().
@@ -31,8 +32,10 @@ var (
 
 	BodyStyle = lipgloss.NewStyle().
 		// Background(lipgloss.Color("#b6f486")).
-		Width(120).
-		Height(20).
+		Width(101).
+		Height(15).
+		AlignHorizontal(lipgloss.Center).
+		AlignVertical(lipgloss.Center).
 		BorderStyle(lipgloss.RoundedBorder())
 
 	FooterStyle = lipgloss.NewStyle().
