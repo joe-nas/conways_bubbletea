@@ -3,7 +3,14 @@ package main
 import "github.com/charmbracelet/lipgloss"
 
 func (m model) View() string {
-	header := renderCell(&titleCell)
+	title := titleCell.renderCell(m)
+
+	statsLeft := statLeftCell.renderCell(m)
+	statsCenter := statCenterCell.renderCell(m)
+	statsRight := statRightCell.renderCell(m)
+	stats := lipgloss.JoinHorizontal(lipgloss.Bottom, statsLeft, statsCenter, statsRight)
+
+	help := helpCell.renderCell(m)
 
 	var content string
 	if !m.altscreen {
@@ -11,5 +18,5 @@ func (m model) View() string {
 	} else {
 		content = m.renderNeighborCount()
 	}
-	return lipgloss.JoinVertical(lipgloss.Left, header, content)
+	return lipgloss.NewStyle().Border(lipgloss.RoundedBorder()).Render(lipgloss.JoinVertical(lipgloss.Center, title, stats, help, content))
 }

@@ -15,29 +15,29 @@ var (
 var (
 	TitleStyle = lipgloss.NewStyle().
 			Foreground(Green).
-		// Background(Blue).
-		Underline(true).
-		Height(1).
-		Width(30)
+			Underline(true).
+			Height(1).
+			Width(30)
 
 	StatsStyle = lipgloss.NewStyle().
-			Background(lipgloss.Color("#400e63")).
-			Width(10).
-			Height(10).BorderStyle(lipgloss.RoundedBorder())
+			Background(Purple1).
+			Width(33).
+			Height(2)
+		// .BorderStyle(lipgloss.RoundedBorder())
 
 	HelpStyle = lipgloss.NewStyle().
-			Background(lipgloss.Color("#88d4c3")).
-			Width(10).
-			Height(10).
-			BorderStyle(lipgloss.RoundedBorder())
+			Background(Purple2).
+			Width(99).
+			Height(2)
+		// BorderStyle(lipgloss.RoundedBorder())
 
 	BodyStyle = lipgloss.NewStyle().
 		// Background(lipgloss.Color("#b6f486")).
 		Width(101).
 		Height(15).
 		AlignHorizontal(lipgloss.Center).
-		AlignVertical(lipgloss.Center).
-		BorderStyle(lipgloss.RoundedBorder())
+		AlignVertical(lipgloss.Center)
+		// BorderStyle(lipgloss.RoundedBorder())
 
 	FooterStyle = lipgloss.NewStyle().
 			Background(lipgloss.Color("#a8aedd")).
@@ -48,8 +48,9 @@ var (
 var (
 	// Overall cursor style
 	CursorStyle = lipgloss.NewStyle().
-		Background(lipgloss.Color("#7d33ff"))
+		Background(Purple2)
 )
+
 var (
 
 	// Styles for count view

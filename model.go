@@ -64,8 +64,19 @@ func initialModel(nrows int, ncols int) model {
 	}
 }
 
-func renderCell(cell *cell) string {
-	return cell.style.Render(cell.content)
+func (c cell) renderCell(m model) string {
+	switch c.name {
+	case "title":
+		return c.style.Render(c.content)
+	case "statLeft":
+		return c.style.Render(fmt.Sprintf(c.content, m.cursor["x"], m.cursor["y"], m.nrows, m.ncols))
+	case "statCenter":
+		return c.style.Render(fmt.Sprintf(c.content, m.autorun))
+	case "statRight":
+		return c.style.Render(fmt.Sprintf(c.content, m.generation))
+	default:
+		return c.style.Render(c.content)
+	}
 }
 
 func (m model) renderGameMap() string {
