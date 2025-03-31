@@ -36,9 +36,19 @@ var (
 	// row 2
 	helpCell = cell{
 		name: "helpCell",
-		content: "(e) toggle tile state, (n) activate next generation\n" +
-			"(a) toggle between map and neighbor count view, (q) quit",
+		content: "(e) toggle tile state, (n) activate next generation, (a) toggle autorun\n" +
+			"(r) reset game state, (s) toggle between map and neighbor count view, (q) quit",
 		rowIdx: 2,
+		colIdx: 0,
+		style:  styles.HelpStyle,
+	}
+
+	// row 4
+	countViewHelp = cell{
+		name: "countExplainer",
+		content: "Alive: %d, Surviving: %d, Born: %d, \n" +
+			"Dying: %d, Dead %d",
+		rowIdx: 4,
 		colIdx: 0,
 		style:  styles.HelpStyle,
 	}

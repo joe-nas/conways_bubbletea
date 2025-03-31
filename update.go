@@ -41,28 +41,29 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			// execute count and change gen
 			m.countNeighbors()
 		case "a":
-			m.altscreen = !m.altscreen
-			// go to next gen
+			// start stop autorun
+			m.autorun = !m.autorun
+			// if autorun start autorunCmd
+			if m.autorun {
+				return m, autorunCmd()
+			}
 		case "n":
 			m.countNeighbors()
 			m.changeGen()
 			m.renderGameMap()
 			m.countNeighbors()
 		case "r":
-			// reset counter
+			// reset counter-game: write a function to reset the game
+			m.autorun = false
 			m.generation = 0
-			// case "x":
-			// 	// move forward x generations
-			// 	m.RenderModal()
+		// case "x":
+		// 	// move forward x generations
+		// 	m.RenderModal()
 		case "s":
-			// start stop autorun
-			m.autorun = !m.autorun
-
-			// if autorun start autorunCmd
-			if m.autorun {
-				return m, autorunCmd()
-			}
+			// go to next gen
+			m.altscreen = !m.altscreen
 		}
+
 	case AutorunMsg:
 		if m.autorun {
 			m.countNeighbors()

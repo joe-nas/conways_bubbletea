@@ -29,9 +29,14 @@ type tile struct {
 	neighbors int
 }
 
-type neighorStats struct {
+type deadOrAliveStats struct {
 	dead  int
 	alive int
+}
+
+type neighborViewStats struct {
+	dead int
+	born int
 }
 
 type model struct {
@@ -45,7 +50,8 @@ type model struct {
 	ncols      int
 	generation int
 
-	neighorStats *neighorStats
+	neighborViewStats *neighborViewStats
+	deadOrAliveStats  *deadOrAliveStats
 }
 
 func (m model) Init() tea.Cmd {
@@ -55,7 +61,7 @@ func (m model) Init() tea.Cmd {
 func initialModel(nrows int, ncols int) model {
 	layout := newGrid(1, 3, 1, 2, 1) // title, stats, help, game, footer
 
-	neighorStats := neighorStats{0, 0}
+	deadOrAliveStats := deadOrAliveStats{0, 0}
 
 	matrix := make([][]tile, nrows)
 	for row := range matrix {
@@ -63,14 +69,14 @@ func initialModel(nrows int, ncols int) model {
 	}
 
 	return model{
-		layout:       *layout,
-		matrix:       matrix,
-		cursor:       map[string]int{"x": 0, "y": 0},
-		nrows:        nrows,
-		ncols:        ncols,
-		generation:   0,
-		autorun:      false,
-		neighorStats: &neighorStats,
+		layout:           *layout,
+		matrix:           matrix,
+		cursor:           map[string]int{"x": 0, "y": 0},
+		nrows:            nrows,
+		ncols:            ncols,
+		generation:       0,
+		autorun:          false,
+		deadOrAliveStats: &deadOrAliveStats,
 	}
 }
 
@@ -81,7 +87,7 @@ func (c cell) renderCell(m model) string {
 	case "statLeft":
 		return c.style.Render(fmt.Sprintf(c.content, m.cursor["x"], m.cursor["y"], m.nrows, m.ncols))
 	case "statCenter":
-		return c.style.Render(fmt.Sprintf(c.content, m.neighorStats.alive, m.neighorStats.dead))
+		return c.style.Render(fmt.Sprintf(c.content, m.deadOrAliveStats.alive, m.deadOrAliveStats.dead))
 	case "statRight":
 		return c.style.Render(fmt.Sprintf(c.content, m.autorun, m.generation))
 	default:
@@ -90,14 +96,14 @@ func (c cell) renderCell(m model) string {
 }
 
 func (m *model) countDeadAlive() {
-	m.neighorStats.alive = 0
-	m.neighorStats.dead = 0
+	m.deadOrAliveStats.alive = 0
+	m.deadOrAliveStats.dead = 0
 	for i := range m.matrix {
 		for j := range m.matrix[i] {
 			if m.matrix[i][j].curr_gen {
-				m.neighorStats.alive += 1
+				m.deadOrAliveStats.alive += 1
 			} else {
-				m.neighorStats.dead += 1
+				m.deadOrAliveStats.dead += 1
 			}
 		}
 	}
