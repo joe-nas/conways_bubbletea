@@ -21,14 +21,14 @@ var (
 	}
 	statCenterCell = cell{
 		name:    "statCenter",
-		content: "Autorun: %t",
+		content: "Alive Cells: %d\nDead Cells: %d",
 		rowIdx:  1,
 		colIdx:  1,
 		style:   styles.StatsStyle,
 	}
 	statRightCell = cell{
 		name:    "statRight",
-		content: "Current generation: %d",
+		content: "Autorun: %t\nCurrent generation: %d",
 		rowIdx:  1,
 		colIdx:  2,
 		style:   styles.StatsStyle,
@@ -43,3 +43,7 @@ var (
 		style:  styles.HelpStyle,
 	}
 )
+
+func (m *model) addCell(c cell) {
+	m.layout.layout[c.rowIdx][c.colIdx] = c
+}

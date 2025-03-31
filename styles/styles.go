@@ -54,15 +54,15 @@ var (
 var (
 
 	// Styles for count view
-	DeadStyle = lipgloss.NewStyle().
+	CellDeadStyle = lipgloss.NewStyle().
 			Background(lipgloss.Color("#000000"))
 
-	DieStyle = lipgloss.NewStyle().
+	CellDieingStyle = lipgloss.NewStyle().
 			Background(lipgloss.Color("#FF0000"))
 
-	BirthStyle = lipgloss.NewStyle().
+	CellBirthStyle = lipgloss.NewStyle().
 			Background(lipgloss.Color("#90ee90"))
 
-	SurviveStyle = lipgloss.NewStyle().
-			Background(lipgloss.Color("#90eeee"))
+	CellSurviveStyle = lipgloss.NewStyle().
+				Background(lipgloss.Color("#90eeee"))
 )

@@ -35,6 +35,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// switch tile state
 		case "e":
 			m.toggleState(m.cursor["x"], m.cursor["y"])
+			m.countDeadAlive()
 		// next generation
 		case "c":
 			// execute count and change gen

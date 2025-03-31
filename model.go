@@ -29,6 +29,11 @@ type tile struct {
 	neighbors int
 }
 
+type neighorStats struct {
+	dead  int
+	alive int
+}
+
 type model struct {
 	layout grid
 	// state
@@ -39,6 +44,8 @@ type model struct {
 	nrows      int
 	ncols      int
 	generation int
+
+	neighorStats *neighorStats
 }
 
 func (m model) Init() tea.Cmd {
@@ -48,19 +55,22 @@ func (m model) Init() tea.Cmd {
 func initialModel(nrows int, ncols int) model {
 	layout := newGrid(1, 3, 1, 2, 1) // title, stats, help, game, footer
 
+	neighorStats := neighorStats{0, 0}
+
 	matrix := make([][]tile, nrows)
 	for row := range matrix {
 		matrix[row] = make([]tile, ncols)
 	}
 
 	return model{
-		layout:     *layout,
-		matrix:     matrix,
-		cursor:     map[string]int{"x": 0, "y": 0},
-		nrows:      nrows,
-		ncols:      ncols,
-		generation: 0,
-		autorun:    false,
+		layout:       *layout,
+		matrix:       matrix,
+		cursor:       map[string]int{"x": 0, "y": 0},
+		nrows:        nrows,
+		ncols:        ncols,
+		generation:   0,
+		autorun:      false,
+		neighorStats: &neighorStats,
 	}
 }
 
@@ -71,24 +81,42 @@ func (c cell) renderCell(m model) string {
 	case "statLeft":
 		return c.style.Render(fmt.Sprintf(c.content, m.cursor["x"], m.cursor["y"], m.nrows, m.ncols))
 	case "statCenter":
-		return c.style.Render(fmt.Sprintf(c.content, m.autorun))
+		return c.style.Render(fmt.Sprintf(c.content, m.neighorStats.alive, m.neighorStats.dead))
 	case "statRight":
-		return c.style.Render(fmt.Sprintf(c.content, m.generation))
+		return c.style.Render(fmt.Sprintf(c.content, m.autorun, m.generation))
 	default:
 		return c.style.Render(c.content)
 	}
 }
 
-func (m model) renderGameMap() string {
+func (m *model) countDeadAlive() {
+	m.neighorStats.alive = 0
+	m.neighorStats.dead = 0
+	for i := range m.matrix {
+		for j := range m.matrix[i] {
+			if m.matrix[i][j].curr_gen {
+				m.neighorStats.alive += 1
+			} else {
+				m.neighorStats.dead += 1
+			}
+		}
+	}
+}
+
+func (m *model) renderGameMap() string {
 	var game_map string
+	// m.neighorStats.alive = 0
+	// m.neighorStats.dead = 0
 	for i := range m.matrix {
 		game_map += "\n"
 		for j := range m.matrix[i] {
 			var cell string
 			if m.matrix[i][j].curr_gen {
+				// m.neighorStats.alive += 1
 				cell = "👽"
 				// cell = "o"
 			} else {
+				// m.neighorStats.dead += 1
 				cell = "💀"
 				// cell = "x"
 			}
@@ -100,12 +128,15 @@ func (m model) renderGameMap() string {
 			game_map += cell
 		}
 	}
+	m.countDeadAlive()
 	return game_map
 }
 
-func (m model) renderNeighborCount() string {
+func (m *model) renderNeighborCount() string {
 	var neighbor_count string
 	var styled_cell string
+	// m.neighorStats.alive = 0
+	// m.neighorStats.dead = 0
 	for i := range m.matrix {
 		neighbor_count += "\n"
 		for j := range m.matrix[i] {
@@ -117,22 +148,27 @@ func (m model) renderNeighborCount() string {
 				// Currently alive cell
 				if cell.neighbors < 2 {
 					// Death by isolation: Fewer than 2 neighbors
-					styled_cell = styles.DieStyle.Render(cellText)
+					// m.neighorStats.dead += 1
+					styled_cell = styles.CellDieingStyle.Render(cellText)
 				} else if cell.neighbors == 2 || cell.neighbors == 3 {
 					// Survival: 2 or 3 neighbors
-					styled_cell = styles.SurviveStyle.Render(cellText)
+					// m.neighorStats.alive += 1
+					styled_cell = styles.CellSurviveStyle.Render(cellText)
 				} else {
 					// Death by overcrowding: More than 3 neighbors
-					styled_cell = styles.DieStyle.Render(cellText)
+					// m.neighorStats.dead += 1
+					styled_cell = styles.CellDieingStyle.Render(cellText)
 				}
 			} else {
 				// Currently dead cell
 				if cell.neighbors == 3 {
 					// Birth: Exactly 3 neighbors
-					styled_cell = styles.BirthStyle.Render(cellText)
+					// m.neighorStats.alive += 1
+					styled_cell = styles.CellBirthStyle.Render(cellText)
 				} else {
 					// Remain dead
-					styled_cell = styles.DeadStyle.Render(cellText)
+					// m.neighorStats.dead += 1
+					styled_cell = styles.CellDeadStyle.Render(cellText)
 				}
 			}
 
@@ -143,5 +179,6 @@ func (m model) renderNeighborCount() string {
 			neighbor_count += styled_cell
 		}
 	}
+	m.countDeadAlive()
 	return neighbor_count
 }
