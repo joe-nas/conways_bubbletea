@@ -1,3 +1,4 @@
 *.exe
 *.py
 test.py
+*.bak
