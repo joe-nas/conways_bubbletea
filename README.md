@@ -17,4 +17,5 @@ Pressing (q) will exit the program.
 - Red cells will die next generation.
 - Blue cells survive till the next generation.
 - Green cells will be born the next generation.
-  ![Stats view]({6EC9DA57-7FCC-4870-8DB0-EBA667DD4357}.png)
+
+![Stats view]({6EC9DA57-7FCC-4870-8DB0-EBA667DD4357}.png)
